@@ -1,0 +1,17 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ["./index.html", "./src/**/*.{js,jsx}"],
+  darkMode: "class", // ← TAMBAHKAN INI
+  theme: {
+    extend: {
+      colors: {
+        primary: "#2563eb",
+        accent: "#2563eb",
+      },
+      fontFamily: {
+        sans: ["Inter", "system-ui", "sans-serif"],
+      },
+    },
+  },
+  plugins: [],
+};

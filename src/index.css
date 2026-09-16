@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: "Inter", system-ui, sans-serif;
+  background-color: #f9fafb;
+  color: #111827;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar halus */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* ===== DARK MODE - FULL BLACK ===== */
+.dark body {
+  background-color: #000000 !important;
+  color: #e2e8f0;
+}
+
+/* Sidebar gelap */
+.dark aside {
+  background-color: #0a0a0a !important;
+  border-right-color: #1f1f1f !important;
+}
+
+/* Konten utama gelap */
+.dark main {
+  background-color: #000000 !important;
+}
+
+/* Card gelap */
+.dark .bg-white {
+  background-color: #0a0a0a !important;
+  border-color: #1f1f1f !important;
+}
+
+.dark .bg-gray-50 {
+  background-color: #0a0a0a !important;
+}
+
+.dark .bg-gray-100 {
+  background-color: #111111 !important;
+}
+
+/* Border gelap */
+.dark .border-gray-200,
+.dark .border-gray-100,
+.dark .border-gray-300 {
+  border-color: #1f1f1f !important;
+}
+
+/* Text gelap */
+.dark .text-gray-900 {
+  color: #f1f5f9 !important;
+}
+
+.dark .text-gray-800 {
+  color: #e2e8f0 !important;
+}
+
+.dark .text-gray-700 {
+  color: #cbd5e1 !important;
+}
+
+.dark .text-gray-600 {
+  color: #94a3b8 !important;
+}
+
+.dark .text-gray-500 {
+  color: #64748b !important;
+}
+
+.dark .text-gray-400 {
+  color: #475569 !important;
+}
+
+/* Hover state */
+.dark .hover\:bg-gray-50:hover {
+  background-color: #1a1a1a !important;
+}
+
+.dark .hover\:bg-gray-100:hover {
+  background-color: #1f1f1f !important;
+}
+
+/* Input gelap */
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: #0a0a0a !important;
+  color: #e2e8f0 !important;
+  border-color: #1f1f1f !important;
+}
+
+.dark input:focus,
+.dark textarea:focus,
+.dark select:focus {
+  border-color: #2563eb !important;
+}
+
+/* Scrollbar gelap */
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}

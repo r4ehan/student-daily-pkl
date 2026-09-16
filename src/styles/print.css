@@ -1,0 +1,46 @@
+@media print {
+  /* Sembunyikan UI yang tidak perlu saat print */
+  nav,
+  aside,
+  button,
+  .no-print,
+  .bottom-nav,
+  .sidebar,
+  .toast-container {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 12pt;
+  }
+
+  main {
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+
+  /* Pastikan konten terlihat */
+  .print-content {
+    display: block !important;
+  }
+
+  /* Link tidak perlu underline saat print */
+  a {
+    text-decoration: none !important;
+    color: black !important;
+  }
+
+  /* Page break */
+  h1,
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+
+  pre,
+  blockquote {
+    page-break-inside: avoid;
+  }
+}
