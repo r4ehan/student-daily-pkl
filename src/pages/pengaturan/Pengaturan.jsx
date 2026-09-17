@@ -673,7 +673,7 @@ export default function Pengaturan() {
 
           <div className="space-y-3">
             <a
-              href="https://wa.me/6281234567890"
+              href="https://wa.me/6281272695418"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors border border-gray-200 dark:border-gray-700"
@@ -686,7 +686,7 @@ export default function Pengaturan() {
                   WhatsApp
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  +62 812-3456-7890
+                  +62 812-7269-5418
                 </p>
               </div>
               <ExternalLink className="w-4 h-4 text-gray-400" />
