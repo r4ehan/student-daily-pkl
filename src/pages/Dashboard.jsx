@@ -37,8 +37,10 @@ export default function Dashboard() {
   const { user, profile, loading, isProfileComplete } = useAuth();
   const navigate = useNavigate();
 
+  // ✅ TAMBAHKAN totalKegiatan: 0 di sini
   const [data, setData] = useState({
     todayKegiatan: null,
+    totalKegiatan: 0,
     lastKegiatan: [],
     activeTarget: null,
     saldo: 0,
@@ -71,7 +73,13 @@ export default function Dashboard() {
         .eq("tanggal", today)
         .limit(1);
 
-      // 2. Ambil 5 kegiatan terakhir
+      // 2. ✅ HITUNG TOTAL KEGIATAN YANG SEBENARNYA (Bukan cuma 5)
+      const { count: totalKegiatan } = await supabase
+        .from("kegiatan")
+        .select("id", { count: "exact", head: true })
+        .eq("user_id", user.id);
+
+      // 3. Ambil 5 kegiatan terakhir (hanya untuk ditampilkan di list)
       const { data: lk } = await supabase
         .from("kegiatan")
         .select("id, tanggal, kegiatan")
@@ -79,14 +87,14 @@ export default function Dashboard() {
         .order("tanggal", { ascending: false })
         .limit(5);
 
-      // 3. Hitung total hari PKL unik
+      // 4. Hitung total hari PKL unik
       const { data: allDates } = await supabase
         .from("kegiatan")
         .select("tanggal")
         .eq("user_id", user.id);
       const uniqueDays = new Set(allDates?.map((k) => k.tanggal) || []).size;
 
-      // 4. Hitung saldo keuangan
+      // 5. Hitung saldo keuangan
       const { data: trx } = await supabase
         .from("transaksi")
         .select("jenis, nominal")
@@ -96,7 +104,7 @@ export default function Dashboard() {
         0,
       );
 
-      // 5. Ambil target aktif terbaru
+      // 6. Ambil target aktif terbaru
       const { data: tgt } = await supabase
         .from("target")
         .select("*")
@@ -105,7 +113,7 @@ export default function Dashboard() {
         .order("created_at", { ascending: false })
         .limit(1);
 
-      // 6. Ambil rencana yang belum selesai (hari ini & masa depan)
+      // 7. Ambil rencana yang belum selesai (hari ini & masa depan)
       const { data: rnc } = await supabase
         .from("rencana")
         .select("*")
@@ -118,6 +126,7 @@ export default function Dashboard() {
       // Update state dengan data yang didapat
       setData({
         todayKegiatan: tk?.[0] || null,
+        totalKegiatan: totalKegiatan || 0, // ✅ SIMPAN TOTAL KEGIATAN DI SINI
         lastKegiatan: lk || [],
         activeTarget: tgt?.[0] || null,
         saldo,
@@ -142,7 +151,7 @@ export default function Dashboard() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-          {getGreeting()}, {nama}
+          {getGreeting()}, {nama} 👋
         </h1>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
           {formatDateID(new Date())}
@@ -193,7 +202,8 @@ export default function Dashboard() {
       {/* Ringkasan */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <SummaryCard label="Hari PKL" value={data.hariPkl} />
-        <SummaryCard label="Kegiatan" value={data.lastKegiatan.length} />
+        {/* ✅ GANTI MENGGUNAKAN data.totalKegiatan */}
+        <SummaryCard label="Total Kegiatan" value={data.totalKegiatan} />
         <SummaryCard label="Saldo" value={formatRupiah(data.saldo)} small />
         <SummaryCard label="Target Aktif" value={data.activeTarget ? 1 : 0} />
       </div>
