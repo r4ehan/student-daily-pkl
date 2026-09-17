@@ -45,7 +45,7 @@ export default function Layanan() {
             Gratis konsultasi tanpa kewajiban. Slot terbatas!
           </p>
           <a
-            href="https://wa.me/6281234567890?text=Halo,%20saya%20tertarik%20dengan%20jasa%20Anda"
+            href="https://wa.me/6281272695418?text=Halo,%20saya%20tertarik%20dengan%20jasa%20Anda"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-4 py-2 bg-white text-blue-600 rounded-lg font-semibold text-sm hover:bg-gray-100 transition-colors"
@@ -330,7 +330,7 @@ export default function Layanan() {
             Gratis konsultasi tanpa kewajiban. Slot terbatas!
           </p>
           <a
-            href="https://wa.me/6281234567890?text=Halo,%20saya%20tertarik%20dengan%20jasa%20Anda"
+            href="https://wa.me/6281272695418?text=Halo,%20saya%20tertarik%20dengan%20jasa%20Anda"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-6 py-3 bg-white text-green-600 rounded-xl font-semibold hover:bg-gray-100 transition-colors"
