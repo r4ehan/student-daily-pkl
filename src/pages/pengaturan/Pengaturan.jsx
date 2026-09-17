@@ -564,7 +564,7 @@ export default function Pengaturan() {
               Student Daily PKL
             </h3>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-              Versi 1.0.0
+              Versi 1.0.1
             </p>
             <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">
               Aplikasi Pencatatan Kegiatan PKL
