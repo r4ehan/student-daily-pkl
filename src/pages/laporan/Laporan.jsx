@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FileText, Download, Calendar, TrendingUp } from "lucide-react";
+import { FileText, Calendar, TrendingUp } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import {
   getStatistikLaporan,
@@ -22,6 +22,8 @@ export default function Laporan() {
     startDate: null,
     endDate: null,
   });
+
+  // ✅ Variabel stats didefinisikan di sini agar tidak error
   const [stats, setStats] = useState(null);
   const [profil, setProfil] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -59,7 +61,8 @@ export default function Laporan() {
     custom: `${period.startDate} — ${period.endDate}`,
   }[period.preset];
 
-  function handleGenerate() {
+  // ✅ Fungsi ini menerima parameter 'type' untuk memilih format
+  function handleGenerate(type) {
     if (!stats || stats.totalKegiatan === 0) {
       setToast({
         type: "error",
@@ -67,7 +70,10 @@ export default function Laporan() {
       });
       return;
     }
-    navigate("/laporan/preview", {
+
+    const path =
+      type === "table" ? "/laporan/preview-tabel" : "/laporan/preview";
+    navigate(path, {
       state: {
         period: periodLabel,
         startDate: period.startDate,
@@ -82,8 +88,10 @@ export default function Laporan() {
 
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Laporan PKL</h1>
-        <p className="text-sm text-gray-500 mt-0.5">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+          Laporan PKL
+        </h1>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
           Rekap dan generator bahan laporan.
         </p>
       </div>
@@ -128,7 +136,7 @@ export default function Laporan() {
           {/* Info PKL */}
           {profil && (
             <Card className="p-5">
-              <h3 className="font-semibold text-gray-900 mb-3">
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">
                 Informasi PKL
               </h3>
               <div className="space-y-2 text-sm">
@@ -141,26 +149,41 @@ export default function Laporan() {
             </Card>
           )}
 
-          {/* Generate Button */}
+          {/* ✅ GENERATE BUTTONS (2 OPSI FORMAT) */}
           <Card className="p-5">
             <div className="text-center">
-              <h3 className="font-semibold text-gray-900 mb-2">
+              <h3 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">
                 Generator Bahan Laporan
               </h3>
-              <p className="text-sm text-gray-500 mb-4">
-                Ubah catatan informal menjadi bahasa formal untuk laporan PKL.
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+                Pilih format laporan yang ingin kamu buat.
               </p>
-              <Button
-                onClick={handleGenerate}
-                disabled={!stats || stats.totalKegiatan === 0}
-                size="lg"
-                className="w-full sm:w-auto"
-              >
-                <FileText className="w-5 h-5 mr-2" />
-                Generate Laporan
-              </Button>
+
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Button
+                  onClick={() => handleGenerate("narrative")}
+                  disabled={!stats || stats.totalKegiatan === 0}
+                  size="lg"
+                  className="flex-1"
+                >
+                  <FileText className="w-5 h-5 mr-2" />
+                  Format Narasi (Teks)
+                </Button>
+
+                <Button
+                  onClick={() => handleGenerate("table")}
+                  disabled={!stats || stats.totalKegiatan === 0}
+                  size="lg"
+                  variant="outline"
+                  className="flex-1"
+                >
+                  <FileText className="w-5 h-5 mr-2" />
+                  Format Tabel (dengan Paraf)
+                </Button>
+              </div>
+
               {stats && stats.totalKegiatan === 0 && (
-                <p className="text-xs text-gray-500 mt-3">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-3">
                   Tidak ada kegiatan dalam periode ini. Pilih periode lain atau
                   catat kegiatan terlebih dahulu.
                 </p>
@@ -175,22 +198,29 @@ export default function Laporan() {
 
 function StatCard({ label, value, icon: Icon, color }) {
   const colors = {
-    blue: "bg-blue-100 text-blue-600",
-    green: "bg-green-100 text-green-600",
-    purple: "bg-purple-100 text-purple-600",
-    orange: "bg-orange-100 text-orange-600",
+    blue: "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400",
+    green:
+      "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400",
+    purple:
+      "bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400",
+    orange:
+      "bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400",
   };
   return (
     <Card className="p-4">
       <div className="flex items-center justify-between mb-2">
-        <p className="text-xs text-gray-500 font-medium">{label}</p>
+        <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+          {label}
+        </p>
         <div
           className={`w-8 h-8 rounded-lg flex items-center justify-center ${colors[color]}`}
         >
           <Icon className="w-4 h-4" />
         </div>
       </div>
-      <p className="text-2xl font-bold text-gray-900">{value}</p>
+      <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+        {value}
+      </p>
     </Card>
   );
 }
@@ -198,8 +228,10 @@ function StatCard({ label, value, icon: Icon, color }) {
 function InfoRow({ label, value }) {
   return (
     <div className="flex">
-      <span className="w-32 text-gray-500">{label}</span>
-      <span className="text-gray-900 font-medium">: {value || "-"}</span>
+      <span className="w-32 text-gray-500 dark:text-gray-400">{label}</span>
+      <span className="text-gray-900 dark:text-gray-100 font-medium">
+        : {value || "-"}
+      </span>
     </div>
   );
 }
