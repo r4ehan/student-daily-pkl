@@ -18,13 +18,16 @@ import {
   EyeOff,
   ArrowLeft,
   AlertCircle,
-  // TAMBAHKAN INI:
   BookOpen,
   ClipboardList,
   Camera,
   Wallet,
   CalendarCheck,
   FileText,
+  Bell,
+  BellOff,
+  Shield,
+  CheckCircle2,
 } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { upsertProfile } from "../../services/profileService";
@@ -36,13 +39,13 @@ import Input from "../../components/ui/Input";
 import Card from "../../components/ui/Card";
 import Toast from "../../components/ui/Toast";
 import ConfirmDialog from "../../components/ui/ConfirmDialog";
-import { Bell, BellOff } from "lucide-react";
 import useDailyNotifications from "../../hooks/useDailyNotifications";
 
 // Menu items
 const MENU_ITEMS = {
   EDIT_PROFILE: "edit_profile",
   GANTI_PASSWORD: "ganti_password",
+  AKUN_GOOGLE: "akun_google",
   TEMA: "tema",
   TENTANG: "tentang",
   BANTUAN: "bantuan",
@@ -175,7 +178,6 @@ export default function Pengaturan() {
 
   async function handleToggleNotif() {
     if (permission === "granted") {
-      // Kalau sudah granted, tampilkan info saja
       setToast({
         type: "info",
         message: "Notifikasi sudah aktif. Kamu akan menerima pengingat harian.",
@@ -226,6 +228,7 @@ export default function Pengaturan() {
     const titles = {
       [MENU_ITEMS.EDIT_PROFILE]: "Edit Profil",
       [MENU_ITEMS.GANTI_PASSWORD]: "Ganti Password",
+      [MENU_ITEMS.AKUN_GOOGLE]: "Akun Google",
       [MENU_ITEMS.TEMA]: "Tampilan",
       [MENU_ITEMS.TENTANG]: "Tentang Aplikasi",
       [MENU_ITEMS.BANTUAN]: "Bantuan & CS",
@@ -268,24 +271,6 @@ export default function Pengaturan() {
     );
   }
 
-  {
-    isSupported && (
-      <MenuItem
-        icon={permission === "granted" ? Bell : BellOff}
-        title="Notifikasi Harian"
-        subtitle={
-          permission === "granted"
-            ? "Aktif - 3 pengingat/hari"
-            : permission === "denied"
-              ? "Ditolak - aktifkan di browser"
-              : "Belum diaktifkan"
-        }
-        onClick={handleToggleNotif}
-        color="blue"
-      />
-    );
-  }
-
   // Render Main Menu
   function renderMainMenu() {
     return (
@@ -307,12 +292,36 @@ export default function Pengaturan() {
         />
 
         <MenuItem
+          icon={Mail}
+          title="Akun Google"
+          subtitle={user?.email || "Tidak terhubung"}
+          onClick={() => setActiveMenu(MENU_ITEMS.AKUN_GOOGLE)}
+          color="blue"
+        />
+
+        <MenuItem
           icon={Palette}
           title="Tema"
           subtitle={theme === "dark" ? "Mode Gelap aktif" : "Mode Terang aktif"}
           onClick={() => setActiveMenu(MENU_ITEMS.TEMA)}
           color="purple"
         />
+
+        {isSupported && (
+          <MenuItem
+            icon={permission === "granted" ? Bell : BellOff}
+            title="Notifikasi Harian"
+            subtitle={
+              permission === "granted"
+                ? "Aktif - 3 pengingat/hari"
+                : permission === "denied"
+                  ? "Ditolak - aktifkan di browser"
+                  : "Belum diaktifkan"
+            }
+            onClick={handleToggleNotif}
+            color="blue"
+          />
+        )}
 
         <MenuItem
           icon={Info}
@@ -471,6 +480,72 @@ export default function Pengaturan() {
     );
   }
 
+  // Render Akun Google (Read-Only)
+  function renderAkunGoogle() {
+    return (
+      <Card className="p-5">
+        <div className="flex items-center gap-3 mb-5">
+          <div className="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+            <Mail className="w-5 h-5 text-blue-600" />
+          </div>
+          <div>
+            <p className="font-medium text-gray-900 dark:text-gray-100">
+              Akun Google Terhubung
+            </p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              Akun ini digunakan untuk login
+            </p>
+          </div>
+        </div>
+
+        {/* Info Akun */}
+        <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-lg">
+              {(user?.email || "U")[0].toUpperCase()}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-semibold text-gray-900 dark:text-gray-100 truncate">
+                {user?.email || "Email tidak tersedia"}
+              </p>
+              <div className="flex items-center gap-1 mt-1">
+                <CheckCircle2 className="w-3 h-3 text-green-500" />
+                <span className="text-xs text-green-600 dark:text-green-400 font-medium">
+                  Terhubung & Terverifikasi
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Info Tambahan */}
+        <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+          <div className="flex items-start gap-2">
+            <Shield className="w-4 h-4 text-blue-600 mt-0.5 shrink-0" />
+            <div>
+              <p className="text-xs font-medium text-blue-700 dark:text-blue-300 mb-1">
+                Akun ini tidak dapat diubah
+              </p>
+              <p className="text-xs text-blue-600 dark:text-blue-400">
+                Email Google ini adalah akun utama yang digunakan untuk login.
+                Untuk mengubah email, silakan logout dan login dengan akun
+                Google lain.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Tombol Logout (Opsional) */}
+        <button
+          onClick={() => setConfirmLogout(true)}
+          className="w-full mt-4 px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+        >
+          Logout & Ganti Akun
+        </button>
+      </Card>
+    );
+  }
+
   // Render Theme Settings
   function renderTheme() {
     return (
@@ -554,7 +629,6 @@ export default function Pengaturan() {
         {/* Info Aplikasi dengan Logo */}
         <Card className="p-5 text-center">
           <div className="flex flex-col items-center">
-            {/* GANTI ICON DENGAN LOGO */}
             <img
               src="/icon-192.png"
               alt="Student Daily PKL Logo"
@@ -611,7 +685,7 @@ export default function Pengaturan() {
           </div>
         </Card>
 
-        {/* CARA PEMAKAIAN (BARU) */}
+        {/* CARA PEMAKAIAN */}
         <Card className="p-5">
           <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2 text-sm">
             <BookOpen className="w-4 h-4 text-primary" /> Cara Pemakaian
@@ -726,6 +800,8 @@ export default function Pengaturan() {
         return renderEditProfile();
       case MENU_ITEMS.GANTI_PASSWORD:
         return renderChangePassword();
+      case MENU_ITEMS.AKUN_GOOGLE:
+        return renderAkunGoogle();
       case MENU_ITEMS.TEMA:
         return renderTheme();
       case MENU_ITEMS.TENTANG:
