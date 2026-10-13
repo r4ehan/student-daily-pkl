@@ -123,3 +123,35 @@ body {
 .dark ::-webkit-scrollbar-thumb:hover {
   background: #475569;
 }
+
+/* Print Styles untuk Laporan Tabel */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .print-container {
+    padding: 0;
+    margin: 0;
+  }
+
+  .print-container .bg-white,
+  .print-container .dark\\:bg-gray-800 {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  body {
+    background: white !important;
+  }
+
+  /* Sidebar & navigation hidden */
+  aside,
+  nav,
+  .sidebar,
+  .bottom-nav {
+    display: none !important;
+  }
+}
