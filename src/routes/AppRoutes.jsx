@@ -41,6 +41,7 @@ import MenuLengkap from "../pages/menu/MenuLengkap";
 // Laporan
 import Laporan from "../pages/laporan/Laporan";
 import LaporanPreview from "../pages/laporan/LaporanPreview";
+import LaporanTabel from "../pages/laporan/LaporanTabel";
 
 import Statistik from "../pages/statistik/Statistik";
 
@@ -101,6 +102,7 @@ export default function AppRoutes() {
         {/* Laporan */}
         <Route path="/laporan" element={<Laporan />} />
         <Route path="/laporan/preview" element={<LaporanPreview />} />
+        <Route path="/laporan/preview-tabel" element={<LaporanTabel />} />
 
         <Route path="/statistik" element={<Statistik />} />
 
